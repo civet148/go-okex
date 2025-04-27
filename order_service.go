@@ -10,19 +10,20 @@ import (
 
 // PlaceOrderService place a single order
 type PlaceOrderService struct {
-	c          *Client
-	instId     string
-	tdMode     TradeMode
-	ccy        *string
-	clOrdId    *string
-	tag        *string
-	side       SideType
-	posSide    PositionSideType
-	ordType    OrderType
-	sz         string
-	px         *string
-	reduceOnly *bool
-	tgtCcy     *string
+	c          *Client          //http对象
+	instId     string           //交易对
+	tdMode     TradeMode        //交易模式
+	ccy        *string          //代币
+	clOrdId    *string          //客户自定义订单ID
+	tag        *string          //标签
+	side       SideType         //交易方向：buy/sell
+	posSide    PositionSideType //持仓方向（永续/交割）
+	ordType    OrderType        //订单类型
+	sz         string           //下单数量
+	px         *string          //下单价格
+	reduceOnly *bool            //未知
+	tgtCcy     *string          //目标代币
+	lever      *string          //杠杆倍数
 }
 
 // Set instrument Id
@@ -97,6 +98,12 @@ func (s *PlaceOrderService) TargetCurrency(tgtCcy string) *PlaceOrderService {
 	return s
 }
 
+// Set leverage
+func (s *PlaceOrderService) Leverage(lever string) *PlaceOrderService {
+	s.lever = &lever
+	return s
+}
+
 // Do send request
 func (s *PlaceOrderService) Do(ctx context.Context, opts ...RequestOption) (res *PlaceOrderResponse, err error) {
 	r := &request{
@@ -130,7 +137,9 @@ func (s *PlaceOrderService) Do(ctx context.Context, opts ...RequestOption) (res 
 	if s.tgtCcy != nil {
 		r.setBodyParam("tgtCcy", *s.tgtCcy)
 	}
-
+	if s.lever != nil {
+		r.setBodyParam("lever", *s.lever)
+	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err
@@ -530,6 +539,7 @@ type ClosePositionService struct {
 	posSide *string
 	mgnMode string
 	ccy     *string
+	clOrdId *string
 }
 
 // Set instrument id
@@ -556,6 +566,12 @@ func (s *ClosePositionService) Currency(ccy string) *ClosePositionService {
 	return s
 }
 
+// Set currency
+func (s *ClosePositionService) CliOrderId(clOrdId string) *ClosePositionService {
+	s.clOrdId = &clOrdId
+	return s
+}
+
 // Do send request
 func (s *ClosePositionService) Do(ctx context.Context, opts ...RequestOption) (res *ClosePositionServiceResponse, err error) {
 	r := &request{
@@ -573,7 +589,9 @@ func (s *ClosePositionService) Do(ctx context.Context, opts ...RequestOption) (r
 	if s.ccy != nil {
 		r.setBodyParam("ccy", *s.ccy)
 	}
-
+	if s.clOrdId != nil {
+		r.setBodyParam("clOrdId", *s.clOrdId)
+	}
 	data, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {
 		return nil, err

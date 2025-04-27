@@ -38,6 +38,9 @@ type NewOrderRespType string
 // OrderStatusType define order status type
 type OrderStatusType string
 
+// MarginMode define margin mode
+type MarginMode string
+
 // SymbolType define symbol type
 type SymbolType string
 
@@ -78,12 +81,15 @@ var UseTestnet = false
 
 // Global enums
 const (
-	TradeModeIsolated TradeMode = "isolated"
-	TradeModeCross    TradeMode = "cross"
-	TradeModeCash     TradeMode = "cash"
+	TradeModeIsolated TradeMode = "isolated" //逐仓
+	TradeModeCross    TradeMode = "cross"    //全仓
+	TradeModeCash     TradeMode = "cash"     //现金
 
-	SideTypeBuy  SideType = "buy"
-	SideTypeSell SideType = "sell"
+	MarginModeIsolated MarginMode = "isolated" //保证金模式（逐仓）
+	MarginModeCross    MarginMode = "cross"    //保证模式（全仓）
+
+	SideTypeBuy  SideType = "buy"  //买
+	SideTypeSell SideType = "sell" //卖
 
 	PositionSideTypeNet   PositionSideType = "net"
 	PositionSideTypeLong  PositionSideType = "long"
