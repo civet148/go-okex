@@ -3,6 +3,7 @@ package okex
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -104,6 +105,9 @@ func (s *FundTransferService) Do(ctx context.Context, opts ...RequestOption) (re
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }

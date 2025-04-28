@@ -17,6 +17,10 @@ import (
 	"github.com/bitly/go-simplejson"
 )
 
+const (
+	codeSucc = "0"
+)
+
 // TradeMode define trade mode
 type TradeMode string
 
@@ -375,7 +379,7 @@ func (c *Client) NewGetInstrumentsService() *GetInstrumentsService {
 	return &GetInstrumentsService{c: c}
 }
 
-// NewGetInstrumentsService
+// NewGetLeverageService
 func (c *Client) NewGetLeverageService() *GetLeverageService {
 	return &GetLeverageService{c: c}
 }
@@ -393,4 +397,9 @@ func (c *Client) NewFundTransferService() *FundTransferService {
 // NewFundTransferService
 func (c *Client) NewMaximumLoanService() *GetMaximumLoanService {
 	return &GetMaximumLoanService{c: c}
+}
+
+// SetLeverageService
+func (c *Client) NewSetLeverageService() *SetLeverageService {
+	return &SetLeverageService{c: c}
 }

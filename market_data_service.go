@@ -3,6 +3,7 @@ package okex
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -47,6 +48,9 @@ func (s *GetTickersService) Do(ctx context.Context, opts ...RequestOption) (res 
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -79,6 +83,9 @@ func (s *GetTickerService) Do(ctx context.Context, opts ...RequestOption) (res *
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }

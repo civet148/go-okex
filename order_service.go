@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -149,6 +150,9 @@ func (s *PlaceOrderService) Do(ctx context.Context, opts ...RequestOption) (res 
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -211,6 +215,9 @@ func (s *CancelOrderService) Do(ctx context.Context, opts ...RequestOption) (res
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -259,6 +266,9 @@ func (s *CancelMultipleOrdersService) Do(ctx context.Context, opts ...RequestOpt
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -374,6 +384,9 @@ func (s *OrderListService) Do(ctx context.Context, opts ...RequestOption) (res *
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -513,6 +526,9 @@ func (s *AmendOrderService) Do(ctx context.Context, opts ...RequestOption) (res 
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -600,6 +616,9 @@ func (s *ClosePositionService) Do(ctx context.Context, opts ...RequestOption) (r
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -788,6 +807,9 @@ func (s *PlaceAlgoOrderService) Do(ctx context.Context, opts ...RequestOption) (
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -838,6 +860,9 @@ func (s *CancelAlgoOrderService) Do(ctx context.Context, opts ...RequestOption) 
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }

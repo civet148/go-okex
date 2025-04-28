@@ -3,6 +3,7 @@ package okex
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -56,6 +57,9 @@ func (s *GetInstrumentsService) Do(ctx context.Context, opts ...RequestOption) (
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -159,6 +163,9 @@ func (s *GetDeliveryExerciseHistoryService) Do(ctx context.Context, opts ...Requ
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }

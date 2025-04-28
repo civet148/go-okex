@@ -3,6 +3,7 @@ package okex
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -39,6 +40,9 @@ func (s *GetBalanceService) Do(ctx context.Context, opts ...RequestOption) (res 
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -142,6 +146,9 @@ func (s *GetPositionsService) Do(ctx context.Context, opts ...RequestOption) (re
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -220,6 +227,9 @@ func (s *GetAccountAndPositionRiskService) Do(ctx context.Context, opts ...Reque
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -258,6 +268,9 @@ func (s *GetAccountConfigurationService) Do(ctx context.Context, opts ...Request
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -310,6 +323,9 @@ func (s *SetAccountPositionModeService) Do(ctx context.Context, opts ...RequestO
 	if err != nil {
 		return nil, err
 	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
 	return res, nil
 }
 
@@ -318,6 +334,72 @@ type SetAccountPositionModeServiceResponse struct {
 	Code string         `json:"code"`
 	Data []*interface{} `json:"data"`
 	Msg  string         `json:"msg"`
+}
+
+type SetLeverageService struct {
+	c       *Client
+	instId  *string
+	mgnMode *string
+	lever   *string
+}
+
+// Set Instrument
+func (s *SetLeverageService) InstrumentId(instId string) *SetLeverageService {
+	s.instId = &instId
+	return s
+}
+
+// Set Margin Mode
+func (s *SetLeverageService) MarginMode(mgnMode string) *SetLeverageService {
+	s.mgnMode = &mgnMode
+	return s
+}
+
+// Set Leverage
+func (s *SetLeverageService) Leverage(lever string) *SetLeverageService {
+	s.lever = &lever
+	return s
+}
+
+// Do send request
+func (s *SetLeverageService) Do(ctx context.Context, opts ...RequestOption) (res *SetLeverageServiceResponse, err error) {
+	r := &request{
+		method:   http.MethodPost,
+		endpoint: "/api/v5/account/set-leverage",
+		secType:  secTypeSigned,
+	}
+
+	if s.instId != nil {
+		r.setBodyParam("instId", *s.instId)
+	}
+
+	if s.mgnMode != nil {
+		r.setBodyParam("mgnMode", *s.mgnMode)
+	}
+
+	if s.lever != nil {
+		r.setBodyParam("lever", *s.lever)
+	}
+
+	data, err := s.c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = new(SetLeverageServiceResponse)
+	err = json.Unmarshal(data, res)
+	if err != nil {
+		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
+	}
+	return res, nil
+}
+
+type SetLeverageServiceResponse struct {
+	Code string            `json:"code"`
+	Data []*LeverageDetail `json:"data"`
+	Msg  string            `json:"msg"`
 }
 
 // GetLeverageService get account balance
@@ -363,6 +445,9 @@ func (s *GetLeverageService) Do(ctx context.Context, opts ...RequestOption) (res
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
@@ -427,6 +512,9 @@ func (s *GetMaximumLoanService) Do(ctx context.Context, opts ...RequestOption) (
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err
+	}
+	if res.Code != codeSucc {
+		return nil, fmt.Errorf("code [%v] msg [%s]", res.Code, res.Msg)
 	}
 	return res, nil
 }
