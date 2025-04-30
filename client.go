@@ -299,9 +299,11 @@ func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption)
 			err = cerr
 		}
 	}()
-	c.debug("response: %#v", res)
-	c.debug("response body: %s", string(data))
-	c.debug("response status code: %d", res.StatusCode)
+	if res.StatusCode != http.StatusOK {
+		c.debug("response status code: %d body: [%s]", res.StatusCode, string(data))
+	} else {
+		c.debug("response body: %s", string(data))
+	}
 
 	if res.StatusCode >= http.StatusBadRequest {
 		apiErr := new(APIError)
