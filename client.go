@@ -75,6 +75,9 @@ type SideEffectType string
 // FuturesTransferType define futures transfer type
 type FuturesTransferType int
 
+// InstType define instance type
+type InstType string
+
 // Endpoints
 const (
 	baseAPIMainURL = "https://www.okx.com"
@@ -116,6 +119,13 @@ const (
 
 	signatureKey  = "signature"
 	recvWindowKey = "recvWindow"
+)
+
+const (
+	InstType_SPOT    InstType = "SPOT"    //现货
+	InstType_SWAP    InstType = "SWAP"    //永续合约
+	InstType_FUTURES InstType = "FUTURES" //交割合约
+	InstType_OPTION  InstType = "OPTION"  //期权
 )
 
 func currentTimestamp() int64 {
